@@ -175,6 +175,10 @@ docker compose -p shift-management-check -f compose.yaml -f compose.test.yaml do
 
 Image builds require internet access; tests do not. ORM schema synchronization is skipped because notifications are DBAL-managed; an integration test checks the mapped shift table against the migration schema.
 
+## Limitations and production considerations
+
+SQLite serializes writes, and the holiday cache is local to one instance. Requests have no idempotency key: if creation commits but the response is lost, repeating the request returns `409`. For a larger deployment, I would revisit database concurrency, introduce idempotency keys, and add monitoring and tested backup/recovery procedures. Holiday cache freshness and outage handling would depend on operational requirements.
+
 ## Time spent
 
 6 hours, including Docker setup, implementation, automated tests and PHPStan, PHPCS and PHP CS Fixer configuration.
