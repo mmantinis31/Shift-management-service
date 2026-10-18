@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="App\Domain\Entity\Shift" table="shifts" repository-class="App\Adapter\Persistence\ShiftRepository">
+        <indexes>
+            <index name="idx_shifts_employee_date_start" columns="employee_id,shift_date,start_time"/>
+        </indexes>
+        <id name="id" type="string" length="32"/>
+        <field name="employeeId" column="employee_id" type="string" length="255"/>
+        <field name="countryCode" column="country_code" type="string" length="2"/>
+        <embedded name="period" class="App\Domain\ValueObject\ShiftPeriod" use-column-prefix="false"/>
+    </entity>
+</doctrine-mapping>

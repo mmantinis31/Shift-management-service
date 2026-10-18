@@ -1,0 +1,15 @@
+.git
+.idea
+.vscode
+.DS_Store
+vendor
+var
+.phpunit.cache
+.env.local
+.env.*.local
+.env.local.php
+config/reference.php
+*.sqlite
+*.sqlite3
+*.sqlite-*
+*.sqlite3-*

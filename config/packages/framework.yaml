@@ -1,0 +1,17 @@
+framework:
+    secret: '%env(APP_SECRET)%'
+    handle_all_throwables: true
+    http_method_override: false
+    php_errors:
+        log: true
+    router:
+        utf8: true
+    http_client:
+        scoped_clients:
+            nager.client:
+                base_uri: '%env(NAGER_API_BASE_URI)%'
+    cache:
+        app: cache.adapter.filesystem
+    serializer: true
+    property_info: true
+    validation: true

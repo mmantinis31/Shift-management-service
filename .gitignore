@@ -1,0 +1,17 @@
+/.idea/
+/.vscode/
+/.DS_Store
+/vendor/
+/var/
+/.phpunit.cache/
+/.env.local
+/.env.*.local
+/.env.local.php
+/compose.override.yaml
+/config/reference.php
+*.sqlite
+*.sqlite3
+*.sqlite-*
+*.sqlite3-*
+
+/.php-cs-fixer.cache

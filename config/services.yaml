@@ -1,0 +1,47 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/Kernel.php'
+            - '../src/Domain/'
+            - '../src/Application/Exception/'
+            - '../src/Application/CreateShift/CreateShiftCommand.php'
+            - '../src/UI/Http/ApiErrorCode.php'
+            - '../src/UI/Http/Dto/'
+            - '../src/Adapter/Client/Nager/Dto/'
+
+    App\Domain\Repository\ShiftRepositoryInterface:
+        alias: App\Adapter\Persistence\ShiftRepository
+
+    App\Application\Contract\ShiftCreationTransactionInterface:
+        alias: App\Adapter\Persistence\ShiftCreationTransaction
+
+    App\Application\Contract\HolidayProviderInterface:
+        alias: App\Adapter\Holiday\CachedHolidayProvider
+
+    App\Adapter\Holiday\CachedHolidayProvider:
+        arguments:
+            $cache: '@cache.app'
+            $cacheTtl: '%env(int:HOLIDAY_CACHE_TTL)%'
+
+    App\Adapter\Persistence\SqliteConnectionMiddleware:
+        arguments:
+            $busyTimeoutMilliseconds: '%env(int:SQLITE_BUSY_TIMEOUT_MS)%'
+
+    App\Adapter\Client\Nager\NagerHolidayClient:
+        arguments:
+            $httpClient: '@nager.client'
+
+    App\Application\Contract\ShiftNotifierInterface:
+        factory: ['App\Adapter\Notification\ShiftNotifierFactory', 'create']
+        arguments:
+            - '%env(bool:SHIFT_NOTIFICATIONS_ENABLED)%'
+            - '@App\Adapter\Notification\DatabaseShiftNotifier'
+            - '@App\Adapter\Notification\NullShiftNotifier'
+
+    Symfony\Component\Serializer\NameConverter\NameConverterInterface:
+        alias: serializer.name_converter.camel_case_to_snake_case

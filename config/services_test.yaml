@@ -1,0 +1,22 @@
+services:
+    App\Tests\Double\FakeHolidayProvider: ~
+
+    App\Application\Contract\HolidayProviderInterface:
+        alias: App\Tests\Double\FakeHolidayProvider
+        public: true
+
+    http_client.transport:
+        class: Symfony\Component\HttpClient\MockHttpClient
+        arguments: [[]]
+        public: true
+
+    test.nager_mapper:
+        alias: App\Adapter\Client\Nager\HolidayResponseMapper
+        public: true
+
+    test.nager_client:
+        alias: App\Adapter\Client\Nager\NagerHolidayClient
+        public: true
+
+    logger:
+        class: Psr\Log\NullLogger

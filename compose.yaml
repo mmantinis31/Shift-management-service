@@ -1,0 +1,45 @@
+services:
+    nginx:
+        build:
+            context: .
+            dockerfile: docker/nginx/Dockerfile
+        ports:
+            - '127.0.0.1:${HTTP_PORT:-8080}:8080'
+        volumes:
+            - ./public:/app/public:ro
+        depends_on:
+            php:
+                condition: service_healthy
+        read_only: true
+        tmpfs:
+            - /tmp
+        cap_drop: [ALL]
+        security_opt: [no-new-privileges:true]
+        healthcheck:
+            test: ['CMD', 'wget', '-q', '--spider', 'http://127.0.0.1:8080/health']
+            interval: 10s
+            timeout: 3s
+            start_period: 5s
+            retries: 3
+
+    php:
+        build:
+            context: .
+        volumes:
+            - .:/app
+            - vendor:/app/vendor
+            - runtime:/app/var
+            - ./var/data:/app/var/data
+        init: true
+        cap_drop: [ALL]
+        security_opt: [no-new-privileges:true]
+        healthcheck:
+            test: ['CMD-SHELL', 'SCRIPT_NAME=/ping SCRIPT_FILENAME=/ping REQUEST_METHOD=GET cgi-fcgi -bind -connect 127.0.0.1:9000 | grep -q pong']
+            interval: 10s
+            timeout: 3s
+            start_period: 5s
+            retries: 3
+
+volumes:
+    vendor:
+    runtime:

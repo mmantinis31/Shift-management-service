@@ -1,0 +1,11 @@
+services:
+    php:
+        environment:
+            APP_ENV: test
+            APP_DEBUG: '1'
+            DATABASE_URL: 'sqlite:///%kernel.project_dir%/var/test/shifts_test.sqlite'
+            SHIFT_NOTIFICATIONS_ENABLED: 'true'
+
+networks:
+    default:
+        internal: true

@@ -1,0 +1,15 @@
+doctrine:
+    dbal:
+        url: '%env(resolve:DATABASE_URL)%'
+        use_savepoints: true
+    orm:
+        auto_mapping: false
+        enable_native_lazy_objects: true
+        controller_resolver:
+            auto_mapping: false
+        mappings:
+            Domain:
+                is_bundle: false
+                type: xml
+                dir: '%kernel.project_dir%/src/Adapter/Persistence/Mapping'
+                prefix: App\Domain
